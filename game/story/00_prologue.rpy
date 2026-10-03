@@ -1,4 +1,5 @@
-# Пролог
+# Prologue and the bot-selection hub.
+# Entry point: start
 
 # Игра начинается здесь:
 label start:
@@ -70,7 +71,13 @@ label start:
 
     "Раптом, екран почорнів як після довгої катки в Бравл Старс, а потім на ньому зʼявився сайт “Сасні тьолки”. Тарас аж відпрянув від неочікуваності."
 
-    show three bots 
+    # Build the selection from the individual portraits instead of the old
+    # flattened composite. Their transforms preserve the intended order and
+    # relative sizes.
+    $ menu_avoids_center_portrait = False
+    show olga at bot_selection_olga
+    show patron at bot_selection_patron
+    show natalia at bot_selection_natalia
 
     "На ньому з9явилися три людини неперевершеної зовнішності, наче найсвіжіші булочки після шести уроків." 
     
@@ -97,21 +104,19 @@ label start:
 
 label vubor_bota:
 
-    menu:
-        "Що за чорт? Ну добре, оберу когось. Можливо, це якись сайт для ролок з ботами"
+    # Replace the text menu with selectable portraits. The screen re-draws the
+    # same portraits over a highlight panel, so hide the static versions first.
+    hide olga
+    hide patron
+    hide natalia
+    call screen bot_selection
 
-        "Пес":
-            hide three bots
-            
-            jump vubor_patron
-
-        "Патріотична жінка":
-            hide three bots
-            "Він натиснув на жінку з русим волоссям та прапорами НЕНЬКИ УКРАЇНИ на щоках."
-            jump vubor_olga
-
-        "Дивовижна вчителька":
-            hide three bots
-            "???"
+    if _return == "patron":
+        jump vubor_patron
+    elif _return == "olga":
+        "Він натиснув на жінку з русим волоссям та прапорами НЕНЬКИ УКРАЇНИ на щоках."
+        jump vubor_olga
+    else:
+        "???"
 
     return

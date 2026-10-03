@@ -146,6 +146,8 @@ style namebox:
 
     background Frame("gui/namebox.png", gui.namebox_borders, tile=gui.namebox_tile, xalign=gui.name_xalign)
     padding gui.namebox_borders.padding
+    # Extra horizontal room keeps speaker names from touching the namebox edge.
+    xpadding 30
 
 style say_label:
     properties gui.text_properties("name", accent=True)
@@ -205,7 +207,13 @@ style input:
 ## https://www.renpy.org/doc/html/screen_special.html#choice
 
 screen choice(items):
-    style_prefix "choice"
+    # Centered portraits occupy the middle of the stage. Keep choices in the
+    # clear left area while one is shown; menus without a portrait retain the
+    # standard centered layout.
+    if menu_avoids_center_portrait:
+        style_prefix "choice_left"
+    else:
+        style_prefix "choice"
 
     vbox:
         for i in items:
@@ -222,6 +230,58 @@ style choice_vbox:
     yanchor 0.5
 
     spacing gui.choice_spacing
+
+# Compact left-side menu used alongside a centered character portrait. The
+# 620px width leaves a gap before the portrait begins on the 1920px stage.
+style choice_left_vbox is choice_vbox:
+    xalign 0.0
+    xpos 32
+
+style choice_left_button is choice_button:
+    xsize 620
+
+style choice_left_button_text is choice_button_text:
+    xalign 0.5
+
+
+## Вибір бота #################################################################
+##
+## The browser selection uses characters as buttons. Ren'Py's normal focus
+## navigation supplies Left/Right and Enter keyboard control; focus and mouse
+## hover both update the same blue highlight.
+
+screen bot_selection():
+    modal True
+    default selected_bot = "patron"
+
+    if selected_bot == "olga":
+        add Solid("#3b9eff55") at bot_selection_highlight_olga
+    elif selected_bot == "patron":
+        add Solid("#3b9eff55") at bot_selection_highlight_patron
+    elif selected_bot == "natalia":
+        add Solid("#3b9eff55") at bot_selection_highlight_natalia
+
+    imagebutton:
+        idle "images/Olga/olga.png"
+        at bot_selection_olga
+        focus_mask True
+        action Return("olga")
+        hovered SetScreenVariable("selected_bot", "olga")
+
+    imagebutton:
+        idle "images/patron/patron.png"
+        at bot_selection_patron
+        focus_mask True
+        default_focus True
+        action Return("patron")
+        hovered SetScreenVariable("selected_bot", "patron")
+
+    imagebutton:
+        idle "images/natalia/natalia.png"
+        at bot_selection_natalia
+        focus_mask True
+        action Return("natalia")
+        hovered SetScreenVariable("selected_bot", "natalia")
 
 style choice_button is default:
     properties gui.button_properties("choice_button")

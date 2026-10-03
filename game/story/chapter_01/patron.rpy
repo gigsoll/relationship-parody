@@ -1,4 +1,9 @@
+# Chapter 1 — Patron route.
+# Entry point from the prologue: vubor_patron
+
 label vubor_patron:
+
+    $ menu_avoids_center_portrait = True
 
     "Думаю, варто вибрати собаку, обожнюю фуррі тяночок."
 

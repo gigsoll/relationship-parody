@@ -1,6 +1,9 @@
-# Ветка Ольги
+# Chapter 1 — Olga route.
+# Entry point from the prologue: vubor_olga
 
 label vubor_olga:
+
+    $ menu_avoids_center_portrait = True
 
     show bg desktop empty:
         xysize (1920, 1080)
@@ -168,7 +171,7 @@ label why_not_front:
     jump scene_o2
 
 
-    return:
+    return
 
 
 label vova_is_that_you:
